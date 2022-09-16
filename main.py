@@ -41,12 +41,12 @@ for heic_filename in HEIC_files:
 
 		jpg_path = dir_of_interest + "/" + os.path.splitext(heic_filename)[0] + ".jpg"
 		# Save image as jpeg
-		image.save(jpg_filename, "jpeg", exif= exif_bytes)
-		JPEG_files.append(jpg_filename);
+		image.save(jpg_path, "jpeg", exif= exif_bytes)
+		JPEG_files.append(jpg_path);
 	else:
 		print(f"Unable to get exif data for {heic_filename}")
 
-JPEG_files.sort(key=lambda i: int(os.path.splitext(os.path.basename(i))[0]))
+JPEG_files.sort(key=lambda i: int(os.path.splitext(os.path.basename(i))[0].split("_")[1]))
 
 images = [Image.open(f) for f in JPEG_files]
 
@@ -59,8 +59,8 @@ for f in HEIC_files:
 	os.remove(f)
 
 for filename in os.listdir(dir_of_interest):
-	jpg_path = os.path.join(dir_of_interest, filename)
-	if os.path.isfile(jpg_path) and filename.lower().endswith((".jpg", ".jpeg")):
+	file_path = os.path.join(dir_of_interest, filename)
+	if os.path.isfile(file_path) and filename.lower().endswith((".jpg", ".jpeg")):
 		try:
 			os.unlink(file_path)
 		except:
