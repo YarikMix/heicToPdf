@@ -1,4 +1,5 @@
 import os
+import itertools
 from PIL import Image, ExifTags
 from pillow_heif import register_heif_opener
 from datetime import datetime
@@ -15,7 +16,7 @@ for index, filename in enumerate([re.search("\.HEIC$|\.heic$", f) for f in filen
 		HEIC_files.append(filenames[index])
 
 JPEG_files = []
-for index, filename in enumerate([re.search("\.JPG$|\.jpg$", f) for f in filenames]):
+for index, filename in enumerate([re.search("\.JPG$|\.jpg$|\.PNG$|\.png$", f) for f in filenames]):
 	if filename:
 		jpeg_path = os.path.join(dir_of_interest, filenames[index])
 		JPEG_files.append(jpeg_path)
@@ -39,7 +40,7 @@ for heic_filename in HEIC_files:
 	else:
 		print(f"Unable to get exif data for {heic_filename}")
 
-JPEG_files.sort(key=lambda i: int(os.path.splitext(os.path.basename(i))[0].split("_")[1]))
+JPEG_files.sort(key=lambda i: int(''.join(itertools.filterfalse(str.isalpha, os.path.splitext(os.path.basename(i))[0]))))
 
 images = [Image.open(f) for f in JPEG_files]
 
@@ -52,7 +53,7 @@ for f in HEIC_files:
 
 for filename in os.listdir(dir_of_interest):
 	file_path = os.path.join(dir_of_interest, filename)
-	if os.path.isfile(file_path) and filename.lower().endswith((".jpg", ".jpeg")):
+	if os.path.isfile(file_path) and filename.lower().endswith((".jpg", ".jpeg", ".png")):
 		try:
 			os.unlink(file_path)
 		except:
