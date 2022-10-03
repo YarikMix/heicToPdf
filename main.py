@@ -40,7 +40,9 @@ for heic_filename in HEIC_files:
 	else:
 		print(f"Unable to get exif data for {heic_filename}")
 
-JPEG_files.sort(key=lambda i: int(''.join(itertools.filterfalse(str.isalpha, os.path.splitext(os.path.basename(i))[0]))))
+print(len(JPEG_files))
+print(JPEG_files)
+JPEG_files.sort(key=lambda i: int(''.join(itertools.filterfalse(str.isalpha, os.path.splitext(os.path.basename(i))[0].replace("_", "")))))
 
 images = [Image.open(f) for f in JPEG_files]
 
